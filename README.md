@@ -1,30 +1,59 @@
-# Nabhrang Cultural Platform
+# नभरंग · Nabhrang — PHP + MySQL Website & Admin Panel
 
-Phase 1 is a Marathi-first PHP 8 + MySQL 8 foundation for a dynamic cultural organization website. It includes a public landing page, secure admin login, dashboard, organization/site settings, bilingual-ready database fields, CSRF protection, PDO prepared statements, sessions, role-ready admin users, and an audit log foundation.
+एक पूर्णपणे डायनॅमिक PHP + MySQL अ‍ॅप्लिकेशन. होस्टिंग: कोणतेही सामान्य cPanel + PHP 8+ + MySQL 8+.
 
-## cPanel installation
+## Highlights
+- संपूर्णपणे मराठी UI (English फील्ड्स ऐच्छिक — भविष्यात बहुभाषिक)
+- डायनॅमिक होमपेज (ब्लॉग, कार्यक्रम, चित्रदालन, व्हिडिओ, प्रकाशने, सूचना, संपर्क)
+- सदस्य नोंदणी + मॅन्युअल QR देयक + प्रशासकीय पडताळणी
+- सदस्यत्व ID जनरेशन (उदा. NB-2026-00001), प्रिंट-योग्य सदस्यत्व ओळखपत्र
+- अहवाल + CSV निर्यात (सदस्य / देयके)
+- लोगो, फेवआयकॉन, QR कोड, संपर्क, सोशल लिंक, SEO — सर्व अ‍ॅडमिन पॅनेलमधून
+- साइट देखभाल मोड (Maintenance Mode)
+- सुरक्षित: PDO Prepared Statements, CSRF, सेशन hardening, password_hash, uploads .htaccess deny
+- Soft delete (Archive) — Blogs, Events, Videos, Publications, Members
+- Audit logs (सर्व प्रशासकीय कृती नोंदल्या जातात)
 
-1. Create a MySQL 8 database and user with `utf8mb4` support.
-2. Import `database.sql` through phpMyAdmin.
-3. Set the required `NABHRANG_DB_HOST`, `NABHRANG_DB_PORT`, `NABHRANG_DB_NAME`, `NABHRANG_DB_USER`, `NABHRANG_DB_PASS`, `NABHRANG_BASE_URL`, and `NABHRANG_ENV` environment variables.
-4. Point the domain document root at this project directory.
-5. Keep `config/` and `storage/` non-public; the included `.htaccess` files block direct access.
-6. Create the first administrator from a shell using `php scripts/create_admin.php username "Marathi name"`; the password is entered interactively and is not exposed in shell history.
-7. Open `/admin/login.php` and sign in.
+## Deployment (cPanel)
 
-## Security checklist
+1. `database.sql` phpMyAdmin मध्ये आयात करा (नवीन डेटाबेस `nabhrang` तयार होईल)
+2. `config/config.example.php` → `config/config.php` म्हणून कॉपी करा आणि DB क्रेडेन्शियल्स भरा
+3. सर्व फाइल्स `public_html/` (किंवा subdomain root) मध्ये अपलोड करा
+4. `uploads/` फोल्डर writable करा (permissions `0755`, फाइल्स `0644`)
+5. पहिला प्रशासक तयार करा (SSH उपलब्ध असल्यास):
+   ```
+   php scripts/create_admin.php admin "प्रशासक"
+   ```
+   SSH नसल्यास phpMyAdmin मधून `admin_users` टेबलात एक रो टाका आणि `password_hash` साठी `password_hash('yourpass', PASSWORD_DEFAULT)` वापरा (कोणत्याही PHP शेल स्क्रिप्टवरून hash तयार करा).
+6. `/admin/login.php` वर लॉगिन करा → संस्था सेटिंग्ज संपादित करा → QR अपलोड करा
 
-- Use a unique database user with only this database's permissions.
-- Run the application over HTTPS so secure session cookies are enabled.
-- Replace the temporary remote image URLs and upload a logo through the future asset settings module.
-- Keep `config/config.php` outside public web root when the host allows it.
-- Never store passwords in plain text; the admin helper uses `password_hash()`.
+## Folder Map
 
-## Phase 1 routes
+| पथ | उद्देश |
+| --- | --- |
+| `/index.php`, `/blog.php`, `/album.php` | सार्वजनिक पाने |
+| `/admin/*.php` | प्रशासक पॅनेल |
+| `/member/*.php` | सदस्य नोंदणी / लॉगिन / डॅशबोर्ड / ओळखपत्र |
+| `/config/` | DB व सेटिंग्ज |
+| `/uploads/` | अपलोड केलेली छायाचित्रे / PDF / QR |
+| `/assets/` | CSS |
+| `/scripts/` | Admin creation |
+| `database.sql` | पूर्ण स्कीमा + seed data |
 
-- `/` — dynamic public landing page
-- `/admin/login.php` — administrator login
-- `/admin/index.php` — dashboard
-- `/admin/settings.php` — Marathi/English organization and site settings
+## Security Checklist
 
-Phase 2 will extend the same PDO/service structure with dynamic registration, membership types, QR payment submission, verification, and member accounts.
+- [x] PDO prepared statements
+- [x] CSRF tokens on every POST
+- [x] `password_hash()` + brute-force limiter on admin login
+- [x] `uploads/.htaccess` PHP execution deny
+- [x] Session hardening (`httponly`, `samesite=Lax`, regenerate on login)
+- [x] Basic MIME + extension + size validation on uploads
+- [x] Audit log for every admin write
+- [ ] HTTPS (सुनिश्चित करा की cPanel वर SSL सक्रिय आहे)
+
+## Roadmap (Future)
+
+- Android REST API endpoints (business logic already isolated per module)
+- Email notifications (registration, verification)
+- Membership renewal automation
+- Advanced page builder / drag-drop content blocks

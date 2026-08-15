@@ -1,0 +1,1 @@
+<?php require __DIR__ . '/../config/bootstrap.php'; if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();unset($_SESSION['member_id']);session_regenerate_id(true);}header('Location:/member/login.php');exit;

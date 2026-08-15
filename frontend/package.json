@@ -61,7 +61,7 @@
     "zod": "3.24.4"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "bash /app/scripts/dev_server.sh",
     "build": "craco build",
     "test": "craco test"
   },

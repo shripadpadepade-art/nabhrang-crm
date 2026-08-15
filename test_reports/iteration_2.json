@@ -1,0 +1,49 @@
+{
+  "summary": "First dynamic E2E run of the Nabhrang PHP 8 + MySQL CMS against the public preview URL. Built a 24-test pytest HTTP suite (cookie jar + CSRF extraction, no /api endpoints) covering public site, admin auth/CSRF, blogs, events, gallery album, settings persistence, maintenance mode, reports CSV, soft deletes, and the full P0 membership lifecycle; plus Playwright browser runs (desktop 1920 and mobile 390) of the same flows. Result: 24/24 HTTP tests pass and every browser flow passed - register -> QR payment with UTR -> admin verify -> approved -> printable card (NB-2026-000NN) works end to end, no PHP warnings/notices/fatals leaked in any page tested. Issues found are UX/robustness gaps (no public blog/event listing pages, missing seeded payment QR, non-responsive admin panel on mobile, archived blogs unrecoverable from the UI, count-based membership_id generation).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/admin/payments.php (next_membership_id in config/bootstrap.php)", "issue": "membership_id is generated as COUNT(members WHERE membership_id IS NOT NULL)+1 while the column is UNIQUE. Any hard-deleted member row (or two concurrent verifications) produces a duplicate ID -> uncaught PDOException. With display_errors=Off that renders a blank 500, no Marathi error page. Use MAX(seq)+1 per year or a counter row, and wrap in try/catch."},
+      {"endpoint": "global (config/bootstrap.php)", "issue": "Only the PDO connect is wrapped in try/catch; no set_exception_handler / custom 500 page. Any query exception on admin or member POSTs yields an empty white 500 response."},
+      {"endpoint": "/admin/blogs.php", "issue": "Blog list is hardcoded to status<>'archived' with no status filter and no restore action, so a soft-deleted (archived) blog can never be viewed or restored from the admin UI (only via DB). Members have restore; blogs/events/albums do not."},
+      {"endpoint": "/ (index.php)", "issue": "Homepage sections are capped (blogs LIMIT 3, events LIMIT 3, albums 6). There is no public listing page - blog.php and album.php are detail-only pages and return the Marathi 404 card without a slug/id - so older published content is unreachable to visitors. Nav links are in-page anchors only."},
+      {"endpoint": "/member/index.php", "issue": "payment_qr_url setting is empty in the seeded DB, so the P0 payment screen shows 'QR कोड अद्याप सेट केलेला नाही'. Seed a placeholder QR or block/flag payment submission until admin uploads one."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Admin panel (_layout.php)", "issue": "Not responsive: at 390px the fixed sidebar stays and the page overflows horizontally (scrollWidth 475 vs 390). Form inputs on /admin/settings.php are clipped off-screen and sidebar labels are invisible (only icons/red block).", "selector": "body.admin-body .admin-shell", "priority": "MEDIUM"},
+      {"component": "Member registration form", "issue": "At 390px the inputs are wider than their card, causing 399px horizontal overflow and right-clipped fields.", "selector": "[data-testid=\"registration-full_name-input\"]", "priority": "LOW"},
+      {"component": "member/card.php", "issue": "Card is rendered small and vertically centered in a very large dark viewport (lots of dead space on desktop); print button works but card scale looks unintentional at 1920px.", "selector": "[data-testid=\"member-card-link\"]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Public homepage nav", "issues": ["Mixed language in an all-Marathi UI: 'Login' and 'Register / सदस्य व्हा' are English while every other nav item is Marathi", "Nav items are anchors only (#about/#blogs/...), so there is no way to reach a full blog/events archive"]},
+      {"screen": "Member registration / payment", "issues": ["Native browser date picker shows US mm/dd/yyyy format in a Marathi UI (acceptable for native PHP, but inconsistent with dd/mm expectation)"]},
+      {"screen": "Member dashboard", "issues": ["Greeting is only 'नमस्कार' - member full name is available and not used"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Replace count-based next_membership_id() with a collision-safe generator and add try/catch around payment verification",
+    "Add a global exception handler + Marathi 500 page (display_errors is Off, failures are currently blank pages)",
+    "Add archived view / restore for blogs, events and gallery albums (soft delete currently one-way in the UI)",
+    "Add public blog listing and events listing pages (or paginate blog.php/events) and point nav links at them",
+    "Seed a placeholder payment QR (payment_qr_url) so the P0 payment screen is complete out of the box",
+    "Make the admin layout responsive (collapsible sidebar, full-width fields) and fix the 390px overflow on member/register.php"
+  ],
+  "critical_code_review_comments": [
+    "config/bootstrap.php next_membership_id(): COUNT()+1 against a UNIQUE column is race-prone and breaks after any row deletion.",
+    "Admin and member sessions share the same cookie/session name ('nabhrang_admin') and both admin_id and member_id can coexist in one session; consider separate session names or clearing the counterpart key on login.",
+    "admin/members.php status filter whitelist lacks 'active' while the UI/labels talk about active members - unknown values silently fall through to 'all', which can mislead admins.",
+    "admin/settings.php saves every whitelisted key on each POST, so any client that omits fields blanks them out; consider partial updates keyed on submitted fields."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (24/24 HTTP/page tests)", "frontend": "100% of functional flows passed; 3 responsive/design issues noted"},
+  "seed_data_creation": "Test suite creates TEST_-prefixed blogs, events, albums, members and payments and purges them from MariaDB before and after the session (purge_test_data()). Browser run created member TEST_ui_792555@example.test (approved, NB-2026-00004) and blog TEST_UI_ब्लॉग_792555 - still present in DB; remove if unwanted.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "admin / password123 at /admin/login.php (works). Members register at /member/register.php with email + password (>=8 chars) - note /app/memory/test_credentials.md says members log in via mobile number, but login is by EMAIL; update the memory file.",
+  "context_for_next_testing_agent": "Run the suite with: cd /app/backend && python3 -m pytest tests/backend_test.py -q (pytest.ini defaults -n 2 --dist loadscope; both classes are order-dependent so keep tests inside their class). The suite needs beautifulsoup4 (installed) and local `mysql -uroot nabhrang` for soft-delete verification/cleanup. There are NO /api JSON endpoints; all assertions are on rendered Marathi HTML and data-testid attributes. Homepage caps blogs/events at 3 rows, so always purge TEST_ data (fixture does it) or new content assertions will flake. Maintenance mode test toggles the setting on and restores it in a finally block - if a run is interrupted while it is on, the public site returns 503 until you re-save settings with the toggle off.",
+  "rca_of_the_issue": "No functional defect reproduced in the P0 lifecycle. Two initial test failures were test-side: admin/members.php echoes the search query back into the filter input (raw substring match gave a false positive) and status=active is not a valid filter value; and admin/blogs.php hides archived rows entirely, so soft-delete verification had to be done against the DB. Both were fixed in the test suite, not in app code."
+}

@@ -1,4 +1,5 @@
+# Deny direct execution inside /uploads/
 Options -Indexes
-<FilesMatch "\.(php|phtml|phar|cgi|pl|py)$">
-  Require all denied
+<FilesMatch "\.(php|phtml|phps|cgi|pl|py|sh)$">
+    Require all denied
 </FilesMatch>

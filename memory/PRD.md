@@ -1,23 +1,43 @@
-# Nabhrang Cultural Platform — Phase 1
+# Nabhrang — Cultural Organization CMS (PRD)
 
-## Original problem statement
-Build a dynamic, secure, mobile-friendly PHP 8 + MySQL 8 cultural organization platform for Nabhrang, with all organization and homepage content managed through an admin panel rather than hard-coded.
+## Original Problem Statement
+Professional, production-ready, mobile-friendly web app for cultural organization "Nabhrang".
+Fully dynamic **PHP 8 + MySQL** application (cPanel/shared hosting compatible) — NOT React/FastAPI.
+- Admin Panel: content, members, manual QR payments, events, gallery, blogs.
+- Manual QR Payment workflow: Register → Pay manually → Enter UTR → Admin verifies → Membership approved.
+- UI language: Marathi (English-ready DB). No payment gateways / email in V1.
 
-## Architecture decisions
-- Native PHP pages with shared bootstrap/layout files for cPanel/shared-hosting compatibility.
-- MySQL schema uses utf8mb4, prepared statements, dynamic settings, bilingual Marathi/English fields, and audit log foundations.
-- PHP sessions, CSRF tokens, password_hash/password_verify, output escaping, role-ready admin accounts, and upload/storage access rules are established.
-- Public content reads from `settings` and `site_sections`; temporary visuals are replaceable later.
+## Architecture
+- Native PHP 8.2, MariaDB (18 tables in /app/database.sql), PDO prepared statements, CSRF, sessions.
+- Served in preview via PHP built-in server on port 3000 (supervisor "frontend" runs /app/scripts/dev_server.sh which also starts MariaDB).
+- Preview URL: https://nabhrang-admin.preview.emergentagent.com
+- Credentials: see /app/memory/test_credentials.md (admin/password123; members log in by EMAIL).
 
-## Implemented
-- Public Marathi-first landing page with dynamic identity, hero, about, membership, footer, and responsive theatrical styling.
-- Admin login with session regeneration, password verification, CSRF, basic login throttling, and logout POST flow.
-- Admin dashboard shell with responsive sidebar and Phase 1 status cards.
-- Organization/site settings editor for Marathi and optional English values, with audit logging.
-- `database.sql`, cPanel installation README, secure config requirements, admin creation helper, and protected upload/storage rules.
+## Implemented (all tested)
+### Earlier sessions
+- Full DB schema, admin panel modules (blogs, events, gallery, videos, publications, notifications, members, payments, reports/CSV), settings + maintenance mode, member register/login/dashboard/QR payment/UTR, printable membership card, soft deletes, Marathi UI, uploads .htaccess.
 
-## Prioritized backlog
-- P0: Validate on PHP 8 + MySQL 8 host; import schema; create first admin; run php -l and authentication regression.
-- P1: Add dynamic membership types, registration field builder, member records, manual QR payment submission and admin verification.
-- P1: Add member login/dashboard, payment history, approval workflow, membership ID and digital card.
-- P2: Add CMS modules for blogs, events, gallery, videos, publications, notifications, reports, backups, SEO, and maintenance mode.
+### 2026-06 (this session)
+- Preview environment wired: PHP server on port 3000 via supervisor; MariaDB auto-start; app testable in side panel.
+- Full E2E test run: 24/24 HTTP tests + browser flows PASSED (register → UTR payment → admin verify → card NB-2026-000NN).
+- Fixes from test report:
+  - Collision-safe membership ID generator (MAX per prefix-year instead of COUNT).
+  - Global exception handler → Marathi 500 page (was blank white page).
+  - Public blog listing page (/blog.php with no slug) + public events page (/events.php, upcoming + past); homepage links to both.
+  - Restore-from-archive for blogs, events, gallery albums (admin ?view=archived toggle).
+  - Admin panel + registration form fully responsive at 390px (scrollWidth verified = viewport).
+  - Nav fully Marathi (Login → लॉगिन); member dashboard greets by name.
+  - Admin/member session key separation on login.
+  - Seeded sample payment QR (/uploads/qr/sample_qr.png) — PLACEHOLDER, admin must upload real UPI QR in settings.
+  - Repaired corrupted trailing bytes in admin/blogs.php.
+
+## Backlog
+- P1: Verify SEO/OG settings coverage in admin settings.
+- P2: Pagination on public blog/events listing (currently LIMIT 60).
+- P2: Partial-update settings save (currently saves all whitelisted keys per POST).
+- Future: Android REST API (JSON endpoints), email notifications (deferred V1).
+
+## Environment Warning
+php-cli + mariadb installed via apt — may be lost on pod restart; reinstall with:
+`apt-get install -y php-cli php-mysql mariadb-server` then `sudo supervisorctl restart frontend`.
+Production deployment target is standard cPanel shared hosting (upload files + import database.sql + edit config via env).

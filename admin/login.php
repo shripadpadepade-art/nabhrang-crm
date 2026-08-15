@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
   if(count($_SESSION['login_attempts'])>=5){ $error='कृपया काही वेळाने पुन्हा प्रयत्न करा.'; }
   else {
     $stmt=$pdo->prepare('SELECT id,username,password_hash,full_name_mr,role FROM admin_users WHERE username=? AND status="active" LIMIT 1'); $stmt->execute([trim($_POST['username']??'')]); $admin=$stmt->fetch();
-    if($admin && password_verify($_POST['password']??'', $admin['password_hash'])) { session_regenerate_id(true); $_SESSION['admin_id']=$admin['id']; $_SESSION['admin_name']=$admin['full_name_mr']; $_SESSION['admin_role']=$admin['role']; $pdo->prepare('UPDATE admin_users SET last_login=NOW() WHERE id=?')->execute([$admin['id']]); audit($pdo,'login','admin_user',(int)$admin['id']); header('Location: /admin/index.php'); exit; }
+    if($admin && password_verify($_POST['password']??'', $admin['password_hash'])) { session_regenerate_id(true); unset($_SESSION['member_id']); $_SESSION['admin_id']=$admin['id']; $_SESSION['admin_name']=$admin['full_name_mr']; $_SESSION['admin_role']=$admin['role']; $pdo->prepare('UPDATE admin_users SET last_login=NOW() WHERE id=?')->execute([$admin['id']]); audit($pdo,'login','admin_user',(int)$admin['id']); header('Location: /admin/index.php'); exit; }
     $_SESSION['login_attempts'][]=$now; $error='वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.';
   }
 }
