@@ -1,0 +1,67 @@
+{
+  "project_name": "Nabhrang Cultural Platform - Phase 1",
+  "app_type": "hybrid_fullstack",
+  "context": "Professional, production-ready, mobile-friendly web application for Marathi cultural organization Nabhrang (नभरंग - Cultural Theatre, Literature & Arts Foundation). PHP + MySQL architecture with dynamic admin panel for managing organization settings, site settings, members, payments, homepage, and registration.",
+  "primary_language": "Marathi-first with English-ready database fields",
+  "design_archetype": "LUXURY & THEATRICAL (Archetype 5 + Archetype 1)",
+  "color_palette": {
+    "primary": "#8B1E24",
+    "primary_hover": "#A5242C",
+    "secondary": "#D4AF37",
+    "accent": "#4A154B",
+    "background_dark": "#120B0C",
+    "background_light": "#FAF6F0",
+    "surface_dark": "#1C1415",
+    "surface_light": "#FFFFFF",
+    "text_dark": "#2C2223",
+    "text_light": "#F5EBE6",
+    "border_color": "#3D2C2E"
+  },
+  "typography": {
+    "heading_font": "Playfair Display, serif",
+    "body_font": "Mukta, Inter, sans-serif",
+    "marathi_font": "Yatra One / Tiro Devanagari Marathi",
+    "scales": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base"
+    }
+  },
+  "visual_enhancers": {
+    "curtain_gradient": "linear-gradient(135deg, #8B1E24 0%, #581115 100%)",
+    "gold_foil": "linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%)",
+    "glassmorphism": "backdrop-blur-xl bg-black/60 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+    "texture": "Subtle theatrical stage red and gold velvet feel with warm amber highlights"
+  },
+  "image_urls": {
+    "hero_theatre": "https://images.unsplash.com/photo-1741681001273-db60e15e623d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGVhdHJlJTIwZHJhbWElMjBzdGFnZSUyMGN1cnRhaW5zJTIwY3VsdHVyYWwlMjBhcnR8ZW58MHx8fHwxNzg2Nzg4ODA5fDA&ixlib=rb-4.1.0&q=85",
+    "red_curtain": "https://images.unsplash.com/photo-1602665770908-fc0b27d21e8a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB0aGVhdHJlJTIwZHJhbWElMjBzdGFnZSUyMGN1cnRhaW5zJTIwY3VsdHVyYWwlMjBhcnR8ZW58MHx8fHwxNzg2Nzg4ODA5fDA&ixlib=rb-4.1.0&q=85",
+    "literature_art": "https://images.unsplash.com/photo-1673858054850-4fa113033fff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwxfHxtYXJhdGhpJTIwbGl0ZXJhdHVyZSUyMGJvb2slMjBhcnQlMjB0cmFkaXRpb25hbCUyMG1haGFyYXNodHJhfGVufDB8fHx8MTc4Njc4ODgwOXww&ixlib=rb-4.1.0&q=85",
+    "classical_dance": "https://images.unsplash.com/photo-1688820661462-a44e4b2770e8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxjbGFzc2ljYWwlMjBkYW5jZSUyMHBlcmZvcm1hbmNlJTIwc3RhZ2UlMjBsaWdodGluZyUyMHRyYWRpdGlvbmFsJTIwaW5kaWF8ZW58MHx8fHwxNzg2Nzg4ODA5fDA&ixlib=rb-4.1.0&q=85"
+  },
+  "database_schema_spec": {
+    "tables": [
+      "settings (id, setting_key, setting_value_mr, setting_value_en, group_name, updated_at)",
+      "site_sections (id, section_name, title_mr, title_en, content_mr, content_en, status, sort_order)",
+      "members (id, full_name_mr, full_name_en, email, phone, membership_type, status, joined_date, created_at)",
+      "payments (id, member_id, amount, payment_method, transaction_id, status, payment_date)",
+      "registrations (id, event_name_mr, event_name_en, participant_name, phone, status, registered_at)",
+      "admin_users (id, username, password_hash, full_name, role, last_login, created_at)",
+      "audit_logs (id, admin_id, action, entity_type, entity_id, ip_address, created_at)"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Build complete PHP + MySQL backend architecture with PDO prepared statements and robust session security.",
+    "Implement Maria-first bilingual UI with English ready fields and dynamic database settings loader (no hardcoded org info).",
+    "Create a fully featured Admin Panel with Admin Login, Dashboard, Organization Settings, Site Settings, Members, Payments, Registrations, and Audit Logs.",
+    "Ensure cPanel / shared hosting compatibility with clean .htaccess routing and structured modular PHP files.",
+    "Style with theatrical crimson and gold velvet aesthetic (#8B1E24 and #D4AF37) keeping mobile responsiveness and accessibility in mind."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Never hardcode organization name, contact info, or banner content into PHP/HTML templates; fetch dynamically from the settings table.",
+    "Always use PDO prepared statements for all database queries to prevent SQL injection.",
+    "Enforce PHP Sessions, password_hash() / password_verify(), CSRF tokens, and role-based authorization for admin routes.",
+    "Include data-testid attributes on all buttons, inputs, and interactive elements for robust automated testing."
+  ]
+}

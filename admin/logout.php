@@ -1,0 +1,1 @@
+<?php require __DIR__ . '/../config/bootstrap.php'; if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: /admin/index.php'); exit; } verify_csrf(); session_unset(); session_destroy(); header('Location: /admin/login.php'); exit;

@@ -1,0 +1,5 @@
+Options -Indexes
+RewriteEngine On
+RewriteRule ^uploads/ - [F,L]
+RewriteRule ^config/ - [F,L]
+RewriteRule ^storage/ - [F,L]
