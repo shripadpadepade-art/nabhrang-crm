@@ -55,7 +55,7 @@ $isApproved = $member['status'] === 'approved' && !empty($member['membership_id'
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>सदस्य डॅशबोर्ड · <?= e($orgName) ?></title>
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body class="admin-body">
 <header class="public-nav" style="position:relative;background:var(--night)">
     <div class="container nav-row">

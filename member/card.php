@@ -53,7 +53,7 @@ $valid    = $member['valid_until'] ?: date('Y-m-d', strtotime('+1 year', strtoti
             .id-card{box-shadow:none;border-color:var(--velvet)}
         }
     </style>
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <div class="card-wrap">
     <div>

@@ -25,7 +25,7 @@ try {
 set_exception_handler(function (Throwable $ex): void {
     error_log('[Nabhrang] ' . $ex->getMessage() . ' @ ' . $ex->getFile() . ':' . $ex->getLine());
     if (!headers_sent()) http_response_code(500);
-    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>त्रुटी</title><link rel="stylesheet" href="/assets/css/nabhrang.css"></head><body class="login-page"><main class="login-card" data-testid="server-error-page"><h1>काहीतरी चुकले</h1><p>तांत्रिक अडचण आली आहे. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.</p><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/" data-testid="error-back-home-link">← मुख्य पानावर परत</a></main></body></html>';
+    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>त्रुटी</title><link rel="stylesheet" href="/assets/css/nabhrang.css"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head><body class="login-page"><main class="login-card" data-testid="server-error-page"><h1>काहीतरी चुकले</h1><p>तांत्रिक अडचण आली आहे. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.</p><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/" data-testid="error-back-home-link">← मुख्य पानावर परत</a></main></body></html>';
     exit;
 });
 
@@ -114,7 +114,7 @@ function maintenance_guard(PDO $pdo): void {
     http_response_code(503);
     $msg = setting($pdo, 'maintenance_message') ?: 'साइट देखभालीसाठी बंद आहे.';
     $name = setting($pdo, 'organization_name') ?: 'नभरंग';
-    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"></head><body class="login-page"><main class="login-card" data-testid="maintenance-page"><div class="brand">' . e($name) . '<small>देखभाल सुरू</small></div><h1>थोडा विसावा</h1><p>' . e($msg) . '</p><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/admin/login.php" data-testid="maintenance-admin-link">प्रशासकीय प्रवेश</a></main></body></html>';
+    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head><body class="login-page"><main class="login-card" data-testid="maintenance-page"><div class="brand">' . e($name) . '<small>देखभाल सुरू</small></div><h1>थोडा विसावा</h1><p>' . e($msg) . '</p><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/admin/login.php" data-testid="maintenance-admin-link">प्रशासकीय प्रवेश</a></main></body></html>';
     exit;
 }
 

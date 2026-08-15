@@ -30,6 +30,10 @@ Fully dynamic **PHP 8 + MySQL** application (cPanel/shared hosting compatible) â
   - Admin/member session key separation on login.
   - Seeded sample payment QR (/uploads/qr/sample_qr.png) â€” PLACEHOLDER, admin must upload real UPI QR in settings.
   - Repaired corrupted trailing bytes in admin/blogs.php.
+- PWA / Add-to-Home-Screen support:
+  - /manifest.json (Marathi name, standalone display), /sw.js service worker (cache static assets, network-first pages), branded app icons (/assets/icons/, golden 'à¤¨' on velvet).
+  - PWA head tags + SW registration injected into every page (11 PHP files). Verified: service worker "activated" on preview.
+- Pod-restart resilience: MySQL datadir moved to persistent /app/storage/mysql; /app/scripts/dev_server.sh now auto-reinstalls php-cli/php-mysql/mariadb-server if missing, auto-initializes datadir, auto-imports database.sql + seeds admin/user/QR (scripts/seed_runtime.sql). DB and services now survive pod restarts.
 
 ## Backlog
 - P1: Verify SEO/OG settings coverage in admin settings.
@@ -38,6 +42,5 @@ Fully dynamic **PHP 8 + MySQL** application (cPanel/shared hosting compatible) â
 - Future: Android REST API (JSON endpoints), email notifications (deferred V1).
 
 ## Environment Warning
-php-cli + mariadb installed via apt â€” may be lost on pod restart; reinstall with:
-`apt-get install -y php-cli php-mysql mariadb-server` then `sudo supervisorctl restart frontend`.
+Self-healing: /app/scripts/dev_server.sh (run by supervisor "frontend") auto-reinstalls php/mariadb after pod restarts and uses persistent datadir /app/storage/mysql. First start after a restart may take ~30-60s (apt install).
 Production deployment target is standard cPanel shared hosting (upload files + import database.sql + edit config via env).

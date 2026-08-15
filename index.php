@@ -39,7 +39,7 @@ $membership = $sections['membership'] ?? [];
     <meta name="description" content="<?= e($seoDesc) ?>">
     <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <nav class="public-nav">
     <div class="container nav-row">

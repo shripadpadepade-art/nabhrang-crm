@@ -80,3 +80,6 @@ memory/test_credentials.md
 
 # Mobile development
 android-sdk/
+storage/mysql/
+storage/runtime.log
+storage/mysql/ib_logfile0

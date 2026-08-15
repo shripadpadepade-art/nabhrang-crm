@@ -1,0 +1,16 @@
+{
+  "name": "नभरंग · रंगभूमी, साहित्य आणि कलेचा उत्सव",
+  "short_name": "नभरंग",
+  "description": "नभरंग सांस्कृतिक संस्था — सदस्यत्व, कार्यक्रम, ब्लॉग आणि चित्रदालन",
+  "lang": "mr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#120b0c",
+  "theme_color": "#120b0c",
+  "icons": [
+    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

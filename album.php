@@ -11,7 +11,7 @@ if ($id) {
 $name = setting($pdo, 'organization_name');
 if (!$album) {
     http_response_code(404);
-    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"></head><body class="login-page"><main class="login-card" data-testid="album-not-found"><h1>अल्बम सापडला नाही</h1><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/" data-testid="back-home-link">← मुख्य पानावर परत</a></main></body></html>';
+    echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head><body class="login-page"><main class="login-card" data-testid="album-not-found"><h1>अल्बम सापडला नाही</h1><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/" data-testid="back-home-link">← मुख्य पानावर परत</a></main></body></html>';
     exit;
 }
 $photos = $pdo->prepare("SELECT file_path,caption_mr FROM gallery_photos WHERE album_id=? AND status='active' ORDER BY sort_order,id DESC");
@@ -25,7 +25,7 @@ $photos = $photos->fetchAll();
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?= e($album['title_mr']) ?> · <?= e($name) ?></title>
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <nav class="public-nav"><div class="container nav-row"><a class="brand" href="/" data-testid="album-nav-brand"><?= e($name) ?></a><a class="btn btn-outline" href="/#gallery" data-testid="album-back-link">← चित्रदालनाकडे</a></div></nav>
 <main class="container section">

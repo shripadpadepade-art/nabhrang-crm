@@ -23,7 +23,7 @@ function event_card(array $ev): void { ?>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>सर्व कार्यक्रम · <?= e($name) ?></title>
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <nav class="public-nav"><div class="container nav-row"><a class="brand" href="/" data-testid="events-page-brand"><?= e($name) ?></a><a class="btn btn-outline" href="/" data-testid="events-page-home-link">← मुख्य पान</a></div></nav>
 <main class="container section">

@@ -12,7 +12,7 @@ if (!$blog) {
     if ($slug !== '') {
         http_response_code(404);
         $name = setting($pdo, 'organization_name');
-        echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"></head><body class="login-page"><main class="login-card" data-testid="blog-not-found"><h1>ब्लॉग सापडला नाही</h1><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/blog.php" data-testid="back-home-link">← सर्व ब्लॉग</a></main></body></html>';
+        echo '<!doctype html><html lang="mr"><head><meta charset="utf-8"><title>' . e($name) . '</title><link rel="stylesheet" href="/assets/css/nabhrang.css"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head><body class="login-page"><main class="login-card" data-testid="blog-not-found"><h1>ब्लॉग सापडला नाही</h1><a class="btn btn-outline" style="color:var(--velvet);border-color:var(--velvet)" href="/blog.php" data-testid="back-home-link">← सर्व ब्लॉग</a></main></body></html>';
         exit;
     }
     $name = setting($pdo, 'organization_name');
@@ -25,7 +25,7 @@ if (!$blog) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>सर्व ब्लॉग · <?= e($name) ?></title>
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <nav class="public-nav"><div class="container nav-row"><a class="brand" href="/" data-testid="blog-list-brand"><?= e($name) ?></a><a class="btn btn-outline" href="/" data-testid="blog-list-home-link">← मुख्य पान</a></div></nav>
 <main class="container section">
@@ -62,7 +62,7 @@ $seoDesc  = $blog['seo_description'] ?: $blog['short_description_mr'];
     <title><?= e($seoTitle) ?> · <?= e($name) ?></title>
     <meta name="description" content="<?= e((string) $seoDesc) ?>">
     <link rel="stylesheet" href="/assets/css/nabhrang.css">
-</head>
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#120b0c"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script></head>
 <body>
 <nav class="public-nav"><div class="container nav-row"><a class="brand" href="/" data-testid="blog-nav-brand"><?= e($name) ?></a><a class="btn btn-outline" href="/" data-testid="blog-back-home-link">← मुख्य पान</a></div></nav>
 <main class="container section" style="max-width:820px">
