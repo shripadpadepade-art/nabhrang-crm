@@ -83,3 +83,9 @@ android-sdk/
 storage/mysql/
 storage/runtime.log
 storage/mysql/ib_logfile0
+.env
+.env.*
+*.env
+credentials.json
+*.key
+.credentials
